@@ -29,14 +29,13 @@ namespace SmartOrderManagement
             m_ctrlIsDelivered.Enabled = false;
         }
 
-        public string GetFilterString( ref string sCustomer, ref string sProduction, ref DateTime dtAcceptDateFrom, ref DateTime dtAcceptDateTo, ref DateTime dtDeadlineFrom, ref DateTime dtDeadlineTo, ref int isCompleted, ref int isDelivered)
+        public string GetFilterString( )
         {
-            if (m_ctrlCustomerFilter.Text != null)
-            {
-                sCustomer = m_ctrlCustomerFilter.Text;
-            }
+            string sCustomer, sProduction;
+            int isCompleted, isDelivered;
+            DateTime dtAcceptDateFrom, dtAcceptDateTo, dtDeadlineFrom, dtDeadlineTo;
 
-            if (m_ctrlProductionFilter.Text != null)
+            if (m_ctrlProductionFilter.Text != "")
             {
                 sProduction = m_ctrlProductionFilter.Text;
 
@@ -48,7 +47,7 @@ namespace SmartOrderManagement
                 dtAcceptDateFrom = m_ctrlAcceptDateFrom.Value;
                 dtAcceptDateTo = m_ctrlAcceptDateTo.Value;
 
-                m_strFilterResult += "-aFrom:" + dtAcceptDateFrom.Date.ToShortDateString() + "-aTo:" + dtAcceptDateTo.Date.ToShortDateString() + " ";
+                m_strFilterResult += "-aFrom:" + dtAcceptDateFrom.Date.ToShortDateString() + " -aTo:" + dtAcceptDateTo.Date.ToShortDateString() + " ";
             }
 
             if (m_ctrlEnableDeadlineFilter.CheckState == CheckState.Checked)
@@ -56,7 +55,7 @@ namespace SmartOrderManagement
                 dtDeadlineFrom = m_ctrlDeliveDateFrom.Value;
                 dtDeadlineTo = m_ctrlDeliveDateTo.Value;
 
-                m_strFilterResult += "dFrom:" + dtAcceptDateTo.Date.ToShortDateString() + "dTo:" + dtAcceptDateTo.Date.ToShortDateString() + " ";
+                m_strFilterResult += "-dFrom:" + dtDeadlineFrom.Date.ToShortDateString() + " -dTo:" + dtDeadlineFrom.Date.ToShortDateString() + " ";
             }
 
             if (m_ctrlEnableStatusFilter.CheckState == CheckState.Checked)
@@ -73,7 +72,11 @@ namespace SmartOrderManagement
                 m_strFilterResult += "-g:" + isDelivered.ToString() + " ";
             }
 
-            m_strFilterResult += sCustomer;
+            if (m_ctrlCustomerFilter.Text != null)
+            {
+                sCustomer = m_ctrlCustomerFilter.Text;
+                m_strFilterResult += sCustomer;
+            }
 
             return m_strFilterResult;
         }
